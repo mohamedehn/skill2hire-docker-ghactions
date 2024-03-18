@@ -1,6 +1,6 @@
 # Continuous Integration with GitHub Action
 
-Our goal is to implement this user story: 
+Our goal is to implement this user story:
 
 > As a developer, I want my application to be built **if I push new code** and all tests pass. The application should be deployable after the built, **so I can test my changes immediately**.
 
@@ -23,7 +23,7 @@ We also have to pulling step implemented with Docker Compose:
 
 * Pull Docker image for Docker Compose
 
-If you call `docker-compose up`, the images `ice0nine/docker-demo:staging` and `ice0nine/docker-demo:prod` will be pulled at DockerHub and be started in a local Docker Compose environment (cmp. last quest).
+If you call `docker-compose up`, the images `mohamedehn/docker-demo:staging` and `mohamedehn/docker-demo:prod` will be pulled at DockerHub and be started in a local Docker Compose environment (cmp. last quest).
 
 So what is missing? We need a trigger which, once we push new code to build the application on a build server, runs all tests and creates a runnable artifact (the Spring Boot web application in our case).
 
@@ -60,7 +60,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Push
         run: |
-          docker push ice0nine/docker-demo:${GITHUB_REF##*/}
+          docker push mohamedehn/docker-demo:${GITHUB_REF##*/}
 ```
 
 ```resource
@@ -89,7 +89,7 @@ we have to store them with the correct keys in the Actions secrets and variables
 
 In our `.github/workflows/on-push.yml` file (_note that the repository folder `.github/workflow` is a convention and must be used for GitHub Actions to work_).
 
-On github.com in your repository, you can choose the tab **Actions** if the file exists and is accessible to GitHub. 
+On github.com in your repository, you can choose the tab **Actions** if the file exists and is accessible to GitHub.
 
 With the instruction `on: [push]` GitHub is instructed to run the actions on each `git push` to any branch. **Our goal is that the Docker image is generated after each push and successful unit testing and pushed to DockerHub.**
 
@@ -111,12 +111,12 @@ You can drill down into logs of each step during the build and watch the executi
 
 ![](https://i.imgur.com/y46bkaVl.png)
 
-After a successful build, the green checkmark should be assigned to the build. 
+After a successful build, the green checkmark should be assigned to the build.
 If there are errors, you can investigate the logs to find our the reasons.
 
 ![](https://i.imgur.com/4cRwdG7l.png)
 
-After successful build, you can log into docker.hub.com to see if the images have been pushed correctly. 
+After successful build, you can log into docker.hub.com to see if the images have been pushed correctly.
 If they have, these new images are now accessible for all users, eg. our `docker-compose.yml`.
 
 ![](https://i.imgur.com/yjExxXfl.png)
